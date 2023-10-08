@@ -162,9 +162,12 @@ export class ImgService {
 
 
 
-    async saveImgFilling(files: any, inf: any, res: any) {
+    async saveImgFilling(files: any, inf: any, res: any) {   
         const i = JSON.parse(inf.auth)
         let b = JSON.parse(inf.inf)
+        console.log(b)
+        console.log(inf)
+        console.log(files)
         let a = await this.appService.authentification(i)
         if(a){
             let fl = await this.appService.flatCheck(a.user_id, b.flat_id)

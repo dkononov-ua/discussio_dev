@@ -22,7 +22,7 @@ constructor(private readonly ImgServicee: ImgService) {}
   }
 
   @Post('uploadFilling')
-  @UseInterceptors(FileInterceptor('file', {limits:{
+  @UseInterceptors(FileInterceptor('file',{limits:{
     fileSize: 30000000, // 30 МБ
   }}))
   async uploadFilling(@UploadedFile() file : any, @Body() inf: Object, @Response() res) {
