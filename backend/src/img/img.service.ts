@@ -100,9 +100,11 @@ export class ImgService {
         const type_file = '.' + files.mimetype.split('/')[1]
         if (a && type_file == '.jpg' || type_file == '.png' || type_file == '.img' || type_file == '.jpeg' || type_file == '.webp') {
             conee.query('SELECT * FROM user_img WHERE user_id = ?;', [a.user_id], (er, re) => {
-                if (re[0] !== undefined) {
+                if (re.img != "user_default.svg") {
                     conee.query('DELETE FROM user_img WHERE img = ?', [re[0].img])
                     unlink("../../code/Static/users/" + re[0].img, (e) => { console.log(e) })
+                }else if(re.img == "user_default.svg"){
+                    conee.query('DELETE FROM user_img WHERE img = ?', [re[0].img])
                 }
                 conee.query("INSERT INTO user_img (user_id, img) VALUES (?, ?)", [a.user_id, files.filename + type_file])
                 rename("../../code/Static/" + files.filename, "../../code/Static/" + files.filename + type_file, (err) => {
