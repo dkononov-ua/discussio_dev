@@ -34,7 +34,7 @@ services:
       - create_table
     build: backend/
     ports:
-      - "443:3000"
+      - "8000:3000"
 
 volumes:
   mysql_data:
