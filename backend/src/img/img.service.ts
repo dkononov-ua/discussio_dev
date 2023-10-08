@@ -175,30 +175,51 @@ export class ImgService {
                 if(files){
                     const type_file = '.' + files.mimetype.split('/')[1]
                     if(type_file == '.jpg' || type_file == '.png' || type_file == '.img' || type_file == '.jpeg' || type_file == '.webp'){
+
                         rename("../../code/Static/" + files.filename, "../../code/Static/" + files.filename + type_file, (err) => {
                             const inputFile = "../../code/Static/" + files.filename + type_file;
                             const outputFile = "../../code/Static/filling/" + files.filename + type_file;
-                            const newWidth = 400; // нова ширина
-                            const newHeight = 400; // нова висота
-                            sharp(inputFile).resize(newWidth, newHeight)
-                                .toFile(outputFile)
-                                .then(() => {
-                                    conee.query("INSERT INTO filling (flat_id, img, about_filling, name_filling, type_filling, number_filling, condition_filling) VALUES (?, ?, ?, ?, ?, ?, ?)", [b.flat_id, files.filename + type_file, b.about_filling, b.name_filling, b.type_filling, b.number_filling, b.condition_filling],
-                                        (errr) => {
-                                            if (errr) {
-                                                unlink(inputFile, () => { })
-                                                unlink(outputFile, () => { })
-                                                res.status(200).json({ status: "Фото квартири неуспішно збережене" });
-                                            } else {
-                                                unlink(inputFile, () => { })
-                                                res.status(200).json({ status: "Фото квартири успішно збережене" });
-                                            }
-                                        })
-                                })
-                                .catch((err) => {
-                                    unlink("../../code/Static/" + files.filename + type_file, () => { })
-                                    console.error('Помилка при зміні розміру зображення:', err);
-                                });
+                            readFile(inputFile, (err, data) => {
+                                if (err) {
+                                    console.error(err);
+                                    return;
+                                }
+                                sharp(data)
+                                    .metadata()
+                                    .then((metadata) => {
+                                        let width: number
+                                        let height: number
+                                        if (metadata.width > 2500 || metadata.height > 2500) {
+                                            width = Math.floor((metadata.width / 5000) * 600);// нова ширина
+                                            height = Math.floor((metadata.height / 5000) * 600);// нова висота
+                                        } else {
+                                            width = Math.floor((metadata.width / 1000) * 600);// нова ширина
+                                            height = Math.floor((metadata.height / 1000) * 600);// нова висота
+                                        }
+                                        sharp(inputFile).resize(width, height)
+                                            .toFile(outputFile)
+                                            .then(() => {
+                                                conee.query("INSERT INTO filling (flat_id, about_filling, name_filling, type_filling, number_filling, condition_filling) VALUES (?, ?, ?, ?, ?, ?)", [b.flat_id, b.about_filling, b.name_filling, b.type_filling, b.number_filling, b.condition_filling],
+                                                    (errrr) => {
+                                                        if (errrr) {
+                                                            unlink(inputFile, () => { })
+                                                            unlink(outputFile, () => { })
+                                                            res.status(200).json({ status: "Фото оселі неуспішно збережене" });
+                                                        } else {
+                                                            unlink(inputFile, () => { })
+                                                            res.status(200).json({ status: "Фото оселі успішно збережене" });
+                                                        }
+                                                    })
+                                            })
+                                            .catch((err) => {
+                                                unlink("../../code/Static/" + files.filename + type_file, () => { })
+                                                console.error('Помилка при зміні розміру зображення:', err);
+                                            });
+                                    })
+                                    .catch((error) => {
+                                        console.error(error);
+                                    });
+                            })
                         })
                     }else{
                         try {
@@ -228,27 +249,47 @@ export class ImgService {
                             rename("../../code/Static/" + files.filename, "../../code/Static/" + files.filename + type_file, (err) => {
                                 const inputFile = "../../code/Static/" + files.filename + type_file;
                                 const outputFile = "../../code/Static/filling/" + files.filename + type_file;
-                                const newWidth = 400; // нова ширина
-                                const newHeight = 400; // нова висота
-                                sharp(inputFile).resize(newWidth, newHeight)
-                                    .toFile(outputFile)
-                                    .then(() => {
-                                        conee.query("INSERT INTO filling (flat_id, img, about_filling, name_filling, type_filling, number_filling, condition_filling) VALUES (?, ?, ?, ?, ?, ?, ?)", [b.flat_id, files.filename + type_file, b.about_filling, b.name_filling, b.type_filling, b.number_filling, b.condition_filling],
-                                            (errr) => {
-                                                if (errr) {
-                                                    unlink(inputFile, () => { })
-                                                    unlink(outputFile, () => { })
-                                                    res.status(200).json({ status: "Фото квартири неуспішно збережене" });
-                                                } else {
-                                                    unlink(inputFile, () => { })
-                                                    res.status(200).json({ status: "Фото квартири успішно збережене" });
-                                                }
-                                            })
-                                    })
-                                    .catch((err) => {
-                                        unlink("../../code/Static/" + files.filename + type_file, () => { })
-                                        console.error('Помилка при зміні розміру зображення:', err);
-                                    });
+                                readFile(inputFile, (err, data) => {
+                                    if (err) {
+                                        console.error(err);
+                                        return;
+                                    }
+                                    sharp(data)
+                                        .metadata()
+                                        .then((metadata) => {
+                                            let width: number
+                                            let height: number
+                                            if (metadata.width > 2500 || metadata.height > 2500) {
+                                                width = Math.floor((metadata.width / 5000) * 600);// нова ширина
+                                                height = Math.floor((metadata.height / 5000) * 600);// нова висота
+                                            } else {
+                                                width = Math.floor((metadata.width / 1000) * 600);// нова ширина
+                                                height = Math.floor((metadata.height / 1000) * 600);// нова висота
+                                            }
+                                            sharp(inputFile).resize(width, height)
+                                                .toFile(outputFile)
+                                                .then(() => {
+                                                    conee.query("INSERT INTO filling (flat_id, about_filling, name_filling, type_filling, number_filling, condition_filling) VALUES (?, ?, ?, ?, ?, ?)", [b.flat_id, b.about_filling, b.name_filling, b.type_filling, b.number_filling, b.condition_filling],
+                                                        (errrr) => {
+                                                            if (errrr) {
+                                                                unlink(inputFile, () => { })
+                                                                unlink(outputFile, () => { })
+                                                                res.status(200).json({ status: "Фото оселі неуспішно збережене" });
+                                                            } else {
+                                                                unlink(inputFile, () => { })
+                                                                res.status(200).json({ status: "Фото оселі успішно збережене" });
+                                                            }
+                                                        })
+                                                })
+                                                .catch((err) => {
+                                                    unlink("../../code/Static/" + files.filename + type_file, () => { })
+                                                    console.error('Помилка при зміні розміру зображення:', err);
+                                                });
+                                        })
+                                        .catch((error) => {
+                                            console.error(error);
+                                        });
+                                })
                             })
                         }else{
                             try {
