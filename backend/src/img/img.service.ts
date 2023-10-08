@@ -99,7 +99,7 @@ export class ImgService {
         let a = await this.appService.authentification(i)
         const type_file = '.' + files.mimetype.split('/')[1]
         if (a && type_file == '.jpg' || type_file == '.png' || type_file == '.img' || type_file == '.jpeg' || type_file == '.webp') {
-            conee.query('SELECT * FROM user_img WHERE user_id = ?;', [a.user_id], (er, re) => {
+            conee.query('SELECT * FROM user_img WHERE user_id = ?;', [a.user_id], (er, re:any) => {
                 if (re.img != "user_default.svg") {
                     conee.query('DELETE FROM user_img WHERE img = ?', [re[0].img])
                     unlink("../../code/Static/users/" + re[0].img, (e) => { console.log(e) })
