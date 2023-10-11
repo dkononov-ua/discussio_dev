@@ -42,12 +42,12 @@ export class ImgService {
                                         .then((metadata) => {
                                             let width: number
                                             let height: number
-                                            if (metadata.width > 2500 || metadata.height > 2500) {
-                                                width = Math.floor((metadata.width / 5000) * 600);// нова ширина
-                                                height = Math.floor((metadata.height / 5000) * 600);// нова висота
-                                            } else {
-                                                width = Math.floor((metadata.width / 1000) * 600);// нова ширина
-                                                height = Math.floor((metadata.height / 1000) * 600);// нова висота
+                                            if (metadata.width >= metadata.height) {
+                                                height = 600;// нова висота
+                                                width = Math.floor((height * metadata.width) / metadata.height);// нова ширина
+                                            } else if(metadata.width <= metadata.height) {
+                                                height = 850;// нова висота
+                                                width = Math.floor((height * metadata.width) / metadata.height);// нова ширина
                                             }
                                             sharp(inputFile).resize(width, height)
                                                 .toFile(outputFile)
@@ -125,12 +125,12 @@ export class ImgService {
                                 .then((metadata) => {
                                     let width: number
                                     let height: number
-                                    if (metadata.width > 2500 || metadata.height > 2500) {
-                                        width = Math.floor((metadata.width / 5000) * 600);// нова ширина
-                                        height = Math.floor((metadata.height / 5000) * 600);// нова висота
-                                    } else {
-                                        width = Math.floor((metadata.width / 1000) * 600);// нова ширина
-                                        height = Math.floor((metadata.height / 1000) * 600);// нова висота
+                                    if (metadata.width >= metadata.height) {
+                                        height = 600;// нова висота
+                                        width = Math.floor((height * metadata.width) / metadata.height);// нова ширина
+                                    } else if(metadata.width <= metadata.height) {
+                                        height = 850;// нова висота
+                                        width = Math.floor((height * metadata.width) / metadata.height);// нова ширина
                                     }
                                     sharp(inputFile).resize(width, height)
                                         .toFile(outputFile)
@@ -175,9 +175,6 @@ export class ImgService {
     async saveImgFilling(files: any, inf: any, res: any) {   
         const i = JSON.parse(inf.auth)
         let b = JSON.parse(inf.inf)
-        console.log(b)
-        console.log(inf)
-        console.log(files)
         let a = await this.appService.authentification(i)
         if(a){
             let fl = await this.appService.flatCheck(a.user_id, b.flat_id)
@@ -198,12 +195,12 @@ export class ImgService {
                                     .then((metadata) => {
                                         let width: number
                                         let height: number
-                                        if (metadata.width > 2500 || metadata.height > 2500) {
-                                            width = Math.floor((metadata.width / 5000) * 600);// нова ширина
-                                            height = Math.floor((metadata.height / 5000) * 600);// нова висота
-                                        } else {
-                                            width = Math.floor((metadata.width / 1000) * 600);// нова ширина
-                                            height = Math.floor((metadata.height / 1000) * 600);// нова висота
+                                        if (metadata.width >= metadata.height) {
+                                            height = 400;// нова висота
+                                            width = Math.floor((height * metadata.width) / metadata.height);// нова ширина
+                                        } else if(metadata.width <= metadata.height) {
+                                            height = 600;// нова висота
+                                            width = Math.floor((height * metadata.width) / metadata.height);// нова ширина
                                         }
                                         sharp(inputFile).resize(width, height)
                                             .toFile(outputFile)
@@ -268,12 +265,12 @@ export class ImgService {
                                         .then((metadata) => {
                                             let width: number
                                             let height: number
-                                            if (metadata.width > 2500 || metadata.height > 2500) {
-                                                width = Math.floor((metadata.width / 5000) * 600);// нова ширина
-                                                height = Math.floor((metadata.height / 5000) * 600);// нова висота
-                                            } else {
-                                                width = Math.floor((metadata.width / 1000) * 600);// нова ширина
-                                                height = Math.floor((metadata.height / 1000) * 600);// нова висота
+                                            if (metadata.width >= metadata.height) {
+                                                height = 400;// нова висота
+                                                width = Math.floor((height * metadata.width) / metadata.height);// нова ширина
+                                            } else if(metadata.width <= metadata.height) {
+                                                height = 600;// нова висота
+                                                width = Math.floor((height * metadata.width) / metadata.height);// нова ширина
                                             }
                                             sharp(inputFile).resize(width, height)
                                                 .toFile(outputFile)
